@@ -2,7 +2,7 @@
   <div class="task">
     <br />
     <p id="id">
-      Task ID: <span id="id_id">{{ task.id }}</span>
+      Task ID: <span id="id_id">{{ module.id }}</span>
     </p>
     <p>{{ task.description }}</p>
 
@@ -11,44 +11,39 @@
       <h2>
         <!-- Loop over each block of text that has a mapped value -->
         <span
-          v-for="(matchBlock, index) in task.data"
-          :key="index"
+          v-for="(question, questionIndex) in module.questions"
+          :key="questionIndex"
           class="selectBlock"
         >
           <span
-            v-if="!('match' in matchBlock) || matchBlock.match === null"
-            :style="matchBlock.style"
+            v-if="!('match' in question) || question.match === null"
+            :style="question.style"
           >
-            {{ matchBlock.text }}
+            {{ question.text }}
           </span>
-
+          
           <SelectableText
             v-else
-            v-for="(s, i) in 'splitChar' in matchBlock
-              ? matchBlock.text.split(matchBlock.splitChar)
-              : [matchBlock.text]"
-            :key="i"
-            :blockIndex="index"
-            :str="
-              s.replace('\n', '<br>') +
-              (matchBlock.splitChar ? matchBlock.splitChar : '')
-            "
+            v-for="(clickableString, clickableStringIndex) in question.getClickableStrings()"
+            :key="clickableStringIndex"
+            :str="clickableString"
+            :qIndex="questionIndex"
+            :styling="question.style"
             @clicked="selectableTextClicked"
-            :styleObj="matchBlock.style"
           />
         </span>
       </h2>
     </div>
 
     <div class="answers">
-      <template v-for="(matchBlock, index) in task.data">
+      <template v-for="(question, questionIndex) in module.questions">
         <div
-          v-if="'match' in matchBlock && matchBlock.match !== null"
-          :key="index"
+          v-if="question.hasAnswer()"
+          :key="questionIndex"
           class="matchAnswer"
-          @click="answerSelected(index)"
+          @click="answerSelected(questionIndex)"
         >
-          {{ matchBlock.match }}
+          {{ question.match }}
         </div>
       </template>
     </div>
@@ -59,42 +54,50 @@
 
 <script>
 import SelectableText from "./SelectableText.vue";
+import MatchingModule from "../classes/MatchingModule.js";
 
 export default {
   name: "Task",
   props: {
-    task: Array,
+    task: Object,
   },
   data: function () {
     return {
+      module: null,
       selected: {},
     };
   },
   components: {
     SelectableText,
   },
+  created: function () {
+    const module = new MatchingModule(this.task);
+    console.log(module);
+    this.module = module;
+  },
   methods: {
     selectableTextClicked: function (selected) {
       // Add a Set if one does not exist for this block.
-      if (!(selected.blockIndex in this.selected)) {
-        this.selected[selected.blockIndex] = new Set();
+      if (!(selected.questionIndex in this.selected)) {
+        this.selected[selected.questionIndex] = new Set();
       }
 
       // Update the Set with what indexes are active.
       if (selected.selected) {
-        this.selected[selected.blockIndex].add(selected.key);
+        this.selected[selected.questionIndex].add(selected.key);
       } else {
-        this.selected[selected.blockIndex].delete(selected.key);
+        this.selected[selected.questionIndex].delete(selected.key);
       }
 
       // Clean up the Set from any empty blocks.
-      if (this.selected[selected.blockIndex].size === 0) {
-        delete this.selected[selected.blockIndex];
+      if (this.selected[selected.questionIndex].size === 0) {
+        delete this.selected[selected.questionIndex];
       }
       console.log(this.selected);
     },
     answerSelected: function (index) {
       // Build an array of the indexes that need to be selected for this answer to be correct.
+      console.log("i: ", index)
       const expectedSelectedIndex = {
         index: index,
         selectedBlocks: [
@@ -117,8 +120,8 @@ export default {
       const correct =
         JSON.stringify(expectedSelectedIndex) === JSON.stringify(selectedIndex);
 
-      console.log(expectedSelectedIndex);
-      console.log(selectedIndex);
+      console.log(expectedSelectedIndex, "expectedSelectedIndex");
+      console.log(selectedIndex, "selectedIndex");
 
       console.log("same: " + correct);
 

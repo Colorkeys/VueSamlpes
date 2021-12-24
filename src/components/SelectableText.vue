@@ -3,7 +3,7 @@
     class="selectable"
     :class="{ selected: selected }"
     @click="click"
-    v-bind:style="styleObj"
+    v-bind:style="styling"
     >{{ str }}</span
   >
 </template>
@@ -13,8 +13,8 @@ export default {
   name: "SelectableText",
   props: {
     str: String,
-    blockIndex: Number,
-    styleObj: Object,
+    qIndex: Number,
+    styling: Object,
   },
   data: function () {
     return {
@@ -27,7 +27,7 @@ export default {
       this.$emit("clicked", {
         selected: this.selected,
         key: this.$vnode.key,
-        blockIndex: this.blockIndex,
+        questionIndex: this.qIndex,
       });
     },
   },
