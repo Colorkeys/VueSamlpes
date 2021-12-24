@@ -3,6 +3,7 @@
     class="selectable"
     :class="{ selected: selected }"
     @click="click"
+    v-bind:style="styleObj"
     >{{ str }}</span
   >
 </template>
@@ -13,6 +14,7 @@ export default {
   props: {
     str: String,
     blockIndex: Number,
+    styleObj: Object,
   },
   data: function () {
     return {
@@ -22,7 +24,7 @@ export default {
   methods: {
     click: function () {
       this.selected = !this.selected;
-      this.$emit('clicked', {
+      this.$emit("clicked", {
         selected: this.selected,
         key: this.$vnode.key,
         blockIndex: this.blockIndex,

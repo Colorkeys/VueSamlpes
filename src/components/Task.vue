@@ -1,6 +1,6 @@
 <template>
   <div class="task">
-    <br>
+    <br />
     <p id="id">
       Task ID: <span id="id_id">{{ task.id }}</span>
     </p>
@@ -15,19 +15,26 @@
           :key="index"
           class="selectBlock"
         >
-          <span v-if="matchBlock.match === null">{{ matchBlock.text }}</span>
+          <span
+            v-if="!('match' in matchBlock) || matchBlock.match === null"
+            :style="matchBlock.style"
+          >
+            {{ matchBlock.text }}
+          </span>
 
           <SelectableText
             v-else
-            v-for="(s, i) in 'selectSplitChar' in matchBlock
-              ? matchBlock.text.split(matchBlock.selectSplitChar)
+            v-for="(s, i) in 'splitChar' in matchBlock
+              ? matchBlock.text.split(matchBlock.splitChar)
               : [matchBlock.text]"
             :key="i"
             :blockIndex="index"
             :str="
-              s + (matchBlock.selectSplitChar ? matchBlock.selectSplitChar : '')
+              s.replace('\n', '<br>') +
+              (matchBlock.splitChar ? matchBlock.splitChar : '')
             "
             @clicked="selectableTextClicked"
+            :styleObj="matchBlock.style"
           />
         </span>
       </h2>
@@ -36,7 +43,7 @@
     <div class="answers">
       <template v-for="(matchBlock, index) in task.data">
         <div
-          v-if="matchBlock.match !== null"
+          v-if="'match' in matchBlock && matchBlock.match !== null"
           :key="index"
           class="matchAnswer"
           @click="answerSelected(index)"
@@ -45,7 +52,7 @@
         </div>
       </template>
     </div>
-    <br>
+    <br />
     <hr />
   </div>
 </template>
@@ -92,9 +99,8 @@ export default {
         index: index,
         selectedBlocks: [
           ...Array(
-            this.task.data[index].text.split(
-              this.task.data[index].selectSplitChar
-            ).length
+            this.task.data[index].text.split(this.task.data[index].splitChar)
+              .length
           ).keys(),
         ],
       };
@@ -135,7 +141,7 @@ export default {
 
 .textBox {
   padding: 20px;
-  background-color: rgb(240, 240, 240);;
+  background-color: rgb(240, 240, 240);
   border-radius: 10px;
 }
 

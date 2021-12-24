@@ -23,7 +23,7 @@ export default {
             {
               text: "בְּרֵאשִׁ֖ית",
               match: "In the begining",
-              selectSplitChar: " ",
+              splitChar: " ",
             },
             {
               text: " ",
@@ -32,7 +32,7 @@ export default {
             {
               text: "בָּרָ֣א אֱלֹהִ֑ים",
               match: "hashem created",
-              selectSplitChar: " ",
+              splitChar: " ",
             },
             {
               text: " ",
@@ -41,7 +41,7 @@ export default {
             {
               text: "אֵ֥ת הַשָּׁמַ֖יִם",
               match: "the heaven",
-              selectSplitChar: " ",
+              splitChar: " ",
             },
             {
               text: " ",
@@ -50,7 +50,7 @@ export default {
             {
               text: "וְאֵ֥ת הָאָֽרֶץ׃",
               match: "and the earth",
-              selectSplitChar: " ",
+              splitChar: " ",
             },
           ],
         },
@@ -124,13 +124,66 @@ export default {
             {
               text: "ב",
               match: "Prefix",
-              selectSplitChar: "",
+              splitChar: "",
             },
             {
               text: "ראשית",
               match: "Word",
-              selectSplitChar: "",
+              splitChar: "",
             },
+          ],
+        },
+        {
+          id: 5,
+          description:
+            "My thoughts on formatting, see raw data for more context.",
+          data: [
+            {
+              text: "Support for ",
+            },
+            {
+              text: "bold",
+              match: "BOLD!",
+              style: {
+                fontWeight: "900",
+              },
+            },
+            {
+              text: " or ",
+            },
+            {
+              text: "italic",
+              match: "italic",
+              style: {
+                fontStyle: "italic",
+              },
+            },
+            {
+              text: " text is possible and would not break this structure. ",
+            },
+            {
+              text: "by storing style with each block!",
+              // Possible way to handle style. If its formatted as valid CSS, it could be dropped into the span!
+              style: {
+                backgroundColor: "yellow",
+                color: "red",
+                padding: "5px",
+                border: "1px solid black",
+                borderRadius: "5px",
+                boxShadow: "0px 0px 5px black",
+              },
+              splitChar: " ",
+              match: "test",
+            },
+            {
+              text: "Maybe with some limitations...",
+              // Possible way to handle style. If its formatted as valid CSS, it could be dropped into the span!
+              style: {
+                fontSize: "10px",
+              },
+              splitChar: " ",
+              match: "test",
+            }
           ],
         },
       ],
