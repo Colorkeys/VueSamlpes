@@ -83,40 +83,7 @@ export default {
       this.attempt.selectableClicked(selected);
     },
     answerSelected: function (index) {
-      // Build an array of the indexes that need to be selected for this answer to be correct.
-      console.log("i: ", index);
-      const expectedSelectedIndex = {
-        index: index,
-        selectedBlocks: [
-          ...Array(
-            this.task.data[index].text.split(this.task.data[index].splitChar)
-              .length
-          ).keys(),
-        ],
-      };
-
-      // Build an array of the indexes that are selected for this answer.
-      let selectedIndex = "null";
-      if (Object.keys(this.attempt.selected).length == 1) {
-        selectedIndex = {
-          index: Number(Object.keys(this.attempt.selected)[0]),
-          selectedBlocks: [...this.attempt.selected[index]].sort(),
-        };
-      }
-
-      const correct =
-        JSON.stringify(expectedSelectedIndex) === JSON.stringify(selectedIndex);
-
-      console.log(expectedSelectedIndex, "expectedSelectedIndex");
-      console.log(selectedIndex, "selectedIndex");
-
-      console.log("same: " + correct);
-
-      if (correct) {
-        alert("Correct!");
-      } else {
-        alert("Incorrect, try again :(");
-      }
+      this.attempt.answerSelected(index);
     },
   },
 };
