@@ -21,15 +21,17 @@
           >
             {{ question.text }}
           </span>
-          
+
           <SelectableText
             v-else
-            v-for="(clickableString, clickableStringIndex) in question.getClickableStrings()"
+            v-for="(
+              clickableString, clickableStringIndex
+            ) in question.getClickableStrings()"
             :key="clickableStringIndex"
             :str="clickableString"
             :qIndex="questionIndex"
             :styling="question.style"
-            @clicked="selectableTextClicked"
+            @clicked="selectableClicked"
           />
         </span>
       </h2>
@@ -55,49 +57,34 @@
 <script>
 import SelectableText from "./SelectableText.vue";
 import MatchingModule from "../classes/MatchingModule.js";
+import MatchingModuleAttempt from "../classes/MatchingModuleAttempt.js";
 
 export default {
   name: "Task",
+  components: {
+    SelectableText,
+  },
   props: {
     task: Object,
   },
   data: function () {
     return {
-      module: null,
+      module: new MatchingModule(this.task),
+      attempt: null,
       selected: {},
     };
   },
-  components: {
-    SelectableText,
-  },
-  created: function () {
-    const module = new MatchingModule(this.task);
-    console.log(module);
-    this.module = module;
-  },
   methods: {
-    selectableTextClicked: function (selected) {
-      // Add a Set if one does not exist for this block.
-      if (!(selected.questionIndex in this.selected)) {
-        this.selected[selected.questionIndex] = new Set();
+    selectableClicked: function (selected) {
+      if (this.attempt === null) {
+        this.attempt = new MatchingModuleAttempt(this.module);
       }
-
-      // Update the Set with what indexes are active.
-      if (selected.selected) {
-        this.selected[selected.questionIndex].add(selected.key);
-      } else {
-        this.selected[selected.questionIndex].delete(selected.key);
-      }
-
-      // Clean up the Set from any empty blocks.
-      if (this.selected[selected.questionIndex].size === 0) {
-        delete this.selected[selected.questionIndex];
-      }
-      console.log(this.selected);
+      
+      this.attempt.selectableClicked(selected);
     },
     answerSelected: function (index) {
       // Build an array of the indexes that need to be selected for this answer to be correct.
-      console.log("i: ", index)
+      console.log("i: ", index);
       const expectedSelectedIndex = {
         index: index,
         selectedBlocks: [
@@ -110,10 +97,10 @@ export default {
 
       // Build an array of the indexes that are selected for this answer.
       let selectedIndex = "null";
-      if (Object.keys(this.selected).length == 1) {
+      if (Object.keys(this.attempt.selected).length == 1) {
         selectedIndex = {
-          index: Number(Object.keys(this.selected)[0]),
-          selectedBlocks: [...this.selected[index]].sort(),
+          index: Number(Object.keys(this.attempt.selected)[0]),
+          selectedBlocks: [...this.attempt.selected[index]].sort(),
         };
       }
 

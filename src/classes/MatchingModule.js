@@ -16,13 +16,12 @@ class MatchingModuleQuestion {
      * @returns an array of strings.
      */
     getClickableStrings() {
-        let clickableText =
-            this.hasSplitChar() ?
+        let clickableText = this.hasSplitChar() ?
             this.text.split(this.splitChar) : [this.text];
 
         // Append spaces (or other char) back to the end of each word.
         // This is for displaying the text correctly for the user.
-        clickableText = clickableText.map(text => {
+        clickableText = clickableText.map((text) => {
             return text + (this.hasSplitChar() ? this.splitChar : "");
         });
 
@@ -41,7 +40,7 @@ class MatchingModuleQuestion {
 /**
  * The base class for all matching modules.
  */
-export default class BaseMatchingModule {
+export default class MatchingModule {
     constructor(rawData) {
         this.id = rawData.id;
         this.questions = rawData.data.map(

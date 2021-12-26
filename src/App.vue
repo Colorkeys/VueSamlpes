@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Task v-for="task in tasks" :task="task" :key="task" />
+    <Task v-for="(task, taskIndex) in tasks" :task="task" :key="taskIndex" />
   </div>
 </template>
 
