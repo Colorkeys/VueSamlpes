@@ -39,14 +39,13 @@
 
     <div class="answers">
       <template v-for="(question, questionIndex) in module.questions">
-        <div
+        <AnswerButton
           v-if="question.match != null"
           :key="questionIndex"
-          class="matchAnswer"
-          @click="answerSelected(questionIndex)"
-        >
-          {{ question.match }}
-        </div>
+          :disabled='!attempt'
+          :question="question"
+          @clicked="answerSelected(questionIndex)"
+        />
       </template>
     </div>
     <br />
@@ -56,6 +55,7 @@
 
 <script>
 import SelectableText from "./SelectableText.vue";
+import AnswerButton from "./AnswerButton.vue";
 import MatchingModule from "../classes/MatchingModule.js";
 import MatchingModuleAttempt from "../classes/MatchingModuleAttempt.js";
 
@@ -63,6 +63,7 @@ export default {
   name: "Task",
   components: {
     SelectableText,
+    AnswerButton,
   },
   props: {
     task: Object,
@@ -84,9 +85,12 @@ export default {
     },
     answerSelected: function (index) {
       if (this.attempt === null) {
-        console.log("You must begin an attempt by selecting some text");
+        alert("You must begin an attempt by selecting some text");
       } else {
-        this.attempt.answerSelected(index);
+        const gotCorrect = this.attempt.answerSelected(index);
+        if (gotCorrect) {
+          this.module.questions[index].gotCorrect = true;
+        }
       }
     },
   },
@@ -120,19 +124,8 @@ export default {
   display: flex;
 }
 
-.matchAnswer {
-  padding: 10px;
-  background-color: rgb(27, 28, 58);
-  color: rgb(255, 255, 255);
-  width: 100px;
-  margin: 10px 10px 10px 0px;
-  cursor: pointer;
-  border-radius: 10px;
-  text-align: center;
-}
-
 .selectBlock {
-  border-right: 1px solid rgb(218, 218, 218);
+  border-right: 0px solid rgb(218, 218, 218);
   /* border-left: 1px brown; */
   /* margin: 1px; */
   /* padding: 1px; */

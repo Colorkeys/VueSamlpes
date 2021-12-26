@@ -1,7 +1,10 @@
 export default class MatchingModuleAttempt {
     constructor(module) {
+        this.startTime = new Date();
+        this.endTime = null;
+
         this.module = module;
-        this.selected = {};
+        this.selectedText = {};
     }
 
     /**
@@ -12,20 +15,20 @@ export default class MatchingModuleAttempt {
      */
     selectableClicked(selected) {
         // Add a Set if one does not exist for this block.
-        if (!(selected.questionIndex in this.selected)) {
-            this.selected[selected.questionIndex] = new Set();
+        if (!(selected.questionIndex in this.selectedText)) {
+            this.selectedText[selected.questionIndex] = new Set();
         }
 
         // Update the Set with what indexes are active.
         if (selected.selected) {
-            this.selected[selected.questionIndex].add(selected.key);
+            this.selectedText[selected.questionIndex].add(selected.key);
         } else {
-            this.selected[selected.questionIndex].delete(selected.key);
+            this.selectedText[selected.questionIndex].delete(selected.key);
         }
 
         // Clean up the Set from any empty blocks.
-        if (this.selected[selected.questionIndex].size === 0) {
-            delete this.selected[selected.questionIndex];
+        if (this.selectedText[selected.questionIndex].size === 0) {
+            delete this.selectedText[selected.questionIndex];
         }
     }
 
@@ -43,11 +46,14 @@ export default class MatchingModuleAttempt {
 
         console.log("same: " + answerCorrect);
 
-        // if (correct) {
-        //     alert("Correct!");
-        // } else {
-        //     alert("Incorrect, try again :(");
-        // }
+        if (answerCorrect) {
+            // this.module.questions[index].gotCorrect = true;
+            alert("Correct!");
+        } else {
+            alert("Incorrect, try again :(");
+        }
+
+        return answerCorrect;
     }
 
     /**
@@ -76,10 +82,10 @@ export default class MatchingModuleAttempt {
      */
     _getCurrentSelectedIndexes(answerIndex) {
         let selectedIndex = "null";
-        if (Object.keys(this.selected).length == 1) {
+        if (Object.keys(this.selectedText).length == 1) {
             selectedIndex = {
-                index: Number(Object.keys(this.selected)[0]),
-                selectedBlocks: answerIndex in this.selected ? [...this.selected[answerIndex]].sort() : [],
+                index: Number(Object.keys(this.selectedText)[0]),
+                selectedBlocks: answerIndex in this.selectedText ? [...this.selectedText[answerIndex]].sort() : [],
             };
         }
         return selectedIndex;

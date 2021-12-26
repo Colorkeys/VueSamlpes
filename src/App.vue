@@ -191,6 +191,14 @@ export default {
               },
               splitChar: " ",
               match: "test",
+            },
+            {
+              text: "The better version of this is to allow the user to allow pre made classes to be added to the block of text.",
+              style: {
+                fontSize: "10px",
+              },
+              splitChar: " ",
+              match: "test",
             }
           ],
         },
