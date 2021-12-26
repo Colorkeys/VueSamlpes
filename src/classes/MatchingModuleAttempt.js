@@ -79,7 +79,7 @@ export default class MatchingModuleAttempt {
         if (Object.keys(this.selected).length == 1) {
             selectedIndex = {
                 index: Number(Object.keys(this.selected)[0]),
-                selectedBlocks: [...this.selected[answerIndex]].sort(),
+                selectedBlocks: answerIndex in this.selected ? [...this.selected[answerIndex]].sort() : [],
             };
         }
         return selectedIndex;

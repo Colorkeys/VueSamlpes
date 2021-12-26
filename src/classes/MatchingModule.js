@@ -31,10 +31,6 @@ class MatchingModuleQuestion {
     hasSplitChar() {
         return typeof this.splitChar == "string";
     }
-
-    hasAnswer() {
-        return typeof this.match == "string";
-    }
 }
 
 /**

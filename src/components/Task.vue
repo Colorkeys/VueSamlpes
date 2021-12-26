@@ -16,7 +16,7 @@
           class="selectBlock"
         >
           <span
-            v-if="!('match' in question) || question.match === null"
+            v-if="typeof question.match == 'undefined'"
             :style="question.style"
           >
             {{ question.text }}
@@ -40,7 +40,7 @@
     <div class="answers">
       <template v-for="(question, questionIndex) in module.questions">
         <div
-          v-if="question.hasAnswer()"
+          v-if="question.match != null"
           :key="questionIndex"
           class="matchAnswer"
           @click="answerSelected(questionIndex)"
@@ -83,7 +83,11 @@ export default {
       this.attempt.selectableClicked(selected);
     },
     answerSelected: function (index) {
-      this.attempt.answerSelected(index);
+      if (this.attempt === null) {
+        console.log("You must begin an attempt by selecting some text");
+      } else {
+        this.attempt.answerSelected(index);
+      }
     },
   },
 };

@@ -78,7 +78,6 @@ export default {
           data: [
             {
               text: "The first word of the Torah is",
-              match: null,
             },
             {
               text: " _________ ",
@@ -86,11 +85,9 @@ export default {
             },
             {
               text: ". ",
-              match: null,
             },
             {
               text: "The second word of the Torah is",
-              match: null,
             },
             {
               text: " _________ ",
@@ -98,12 +95,31 @@ export default {
             },
             {
               text: ". ",
-              match: null,
             },
           ],
         },
         {
           id: 3,
+          description: "How to make things hard by confusing students",
+          data: [
+            {
+              text: "All of this text is selectable, but only ",
+              match: null,
+              splitChar: " ",
+            },
+            {
+              text: "one",
+              match: "Which one is it? 😈",
+            },
+            {
+              text: " is the correct answer!",
+              match: null,
+              splitChar: " ",
+            },
+          ],
+        },
+        {
+          id: 4,
           description: "Shoresh example 1",
           data: [
             {
@@ -117,7 +133,7 @@ export default {
           ],
         },
         {
-          id: 4,
+          id: 5,
           description:
             "Shoresh example 2 (Does not work with nikud included due to unicode issues, but this can be corrected with grapheme splitting).",
           data: [
@@ -134,7 +150,7 @@ export default {
           ],
         },
         {
-          id: 5,
+          id: 6,
           description:
             "My thoughts on formatting, see raw data for more context.",
           data: [
@@ -162,7 +178,7 @@ export default {
               text: " text is possible and would not break this structure. ",
             },
             {
-              text: "by storing style with each block!",
+              text: "Maybe with some limitations...",
               // Possible way to handle style. If its formatted as valid CSS, it could be dropped into the span!
               style: {
                 backgroundColor: "yellow",
@@ -171,14 +187,6 @@ export default {
                 border: "1px solid black",
                 borderRadius: "5px",
                 boxShadow: "0px 0px 5px black",
-              },
-              splitChar: " ",
-              match: "test",
-            },
-            {
-              text: "Maybe with some limitations...",
-              // Possible way to handle style. If its formatted as valid CSS, it could be dropped into the span!
-              style: {
                 fontSize: "10px",
               },
               splitChar: " ",
