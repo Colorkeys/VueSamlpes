@@ -5,9 +5,9 @@ export default class MatchingModuleAttempt {
     }
 
     /**
-     * User selected a word (or letter) on the question.
-     * This is the action that registers each click and keeps track
-     * of the users selection.
+     * Action taken when user selects any selectable text.
+     * This function keeps track of the selected text 
+     * in preparation for checking if the selections match the answer.
      * @param {selected, key, questionIndex} selected 
      */
     selectableClicked(selected) {
@@ -29,8 +29,14 @@ export default class MatchingModuleAttempt {
         }
     }
 
+    /**
+     * Action taken when the user selects an answer. 
+     * This function compares what the user has selected 
+     * with the expected selection for the selected answer.
+     * @param {*} index 
+     */
     answerSelected(index) {
-        const answerCorrect = this._selectionMatchesAnswer(
+        const answerCorrect = this._objectsMatch(
             this._getAnswerExpectedSelectedIndexes(index),
             this._getCurrentSelectedIndexes(index)
         )
@@ -44,6 +50,11 @@ export default class MatchingModuleAttempt {
         // }
     }
 
+    /**
+     * Builds an  object representing the expected selected indexes (text) for a given answer.
+     * @param {*} answerIndex 
+     * @returns 
+     */
     _getAnswerExpectedSelectedIndexes(answerIndex) {
         const expectedSelectedIndex = {
             index: answerIndex,
@@ -57,6 +68,12 @@ export default class MatchingModuleAttempt {
         return expectedSelectedIndex;
     }
 
+    /**
+     * Builds an object representing the currently selected indexes (text) for 
+     * comparison with an object of expected indexes for the given answer.
+     * @param {*} answerIndex 
+     * @returns 
+     */
     _getCurrentSelectedIndexes(answerIndex) {
         let selectedIndex = "null";
         if (Object.keys(this.selected).length == 1) {
@@ -68,7 +85,13 @@ export default class MatchingModuleAttempt {
         return selectedIndex;
     }
 
-    _selectionMatchesAnswer(selectedIndexes, answerExpectedIndexes) {
-        return JSON.stringify(selectedIndexes) === JSON.stringify(answerExpectedIndexes);
+    /**
+     * Compares 2 objects to see if they match.
+     * @param {*} object1 
+     * @param {*} object2 
+     * @returns 
+     */
+    _objectsMatch(object1, object2) {
+        return JSON.stringify(object1) === JSON.stringify(object2);
     }
 }
